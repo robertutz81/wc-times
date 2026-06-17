@@ -40,7 +40,7 @@
         <div class="map-wrap">
           <div id="map" class="map" aria-label="Landkarte der WM-Spielorte"></div>
           <div class="map-legend">
-            <span class="dot match"></span> Spiel heute
+            <span class="dot match"></span> Spiel am Datum
             <span class="dot venue"></span> Spielort
           </div>
         </div>
@@ -57,10 +57,14 @@
       <section class="matches" aria-labelledby="matches-title">
         <div class="section-title">
           <div>
-            <p class="eyebrow">Heute & als Naechstes</p>
-            <h2 id="matches-title">Aktuelle Spiele</h2>
+            <p class="eyebrow">Spieltag</p>
+            <h2 id="matches-title">Spiele nach Datum</h2>
           </div>
-          <span id="data-stamp" class="data-stamp"></span>
+          <div class="match-controls">
+            <label for="match-date">Datum</label>
+            <input id="match-date" type="date" />
+            <span id="data-stamp" class="data-stamp"></span>
+          </div>
         </div>
         <div id="match-list" class="match-grid"></div>
       </section>

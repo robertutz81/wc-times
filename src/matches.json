@@ -1,0 +1,82 @@
+[
+  {
+    "date": "2026-06-17",
+    "time": "12:00",
+    "group": "Gruppe L",
+    "stage": "GROUP_STAGE",
+    "status": "SCHEDULED",
+    "home": "Ghana",
+    "away": "Panama",
+    "venueId": "toronto"
+  },
+  {
+    "date": "2026-06-17",
+    "time": "15:00",
+    "group": "Gruppe L",
+    "stage": "GROUP_STAGE",
+    "status": "SCHEDULED",
+    "home": "England",
+    "away": "Kroatien",
+    "venueId": "dallas"
+  },
+  {
+    "date": "2026-06-17",
+    "time": "18:00",
+    "group": "Gruppe K",
+    "stage": "GROUP_STAGE",
+    "status": "SCHEDULED",
+    "home": "Portugal",
+    "away": "DR Kongo",
+    "venueId": "houston"
+  },
+  {
+    "date": "2026-06-17",
+    "time": "19:00",
+    "group": "Gruppe K",
+    "stage": "GROUP_STAGE",
+    "status": "SCHEDULED",
+    "home": "Usbekistan",
+    "away": "Kolumbien",
+    "venueId": "mexico-city"
+  },
+  {
+    "date": "2026-06-18",
+    "time": "12:00",
+    "group": "Gruppe A",
+    "stage": "GROUP_STAGE",
+    "status": "SCHEDULED",
+    "home": "Tschechien",
+    "away": "Suedafrika",
+    "venueId": "atlanta"
+  },
+  {
+    "date": "2026-06-18",
+    "time": "15:00",
+    "group": "Gruppe B",
+    "stage": "GROUP_STAGE",
+    "status": "SCHEDULED",
+    "home": "Schweiz",
+    "away": "Bosnien und Herzegowina",
+    "venueId": "los-angeles"
+  },
+  {
+    "date": "2026-06-18",
+    "time": "18:00",
+    "group": "Gruppe B",
+    "stage": "GROUP_STAGE",
+    "status": "SCHEDULED",
+    "home": "Kanada",
+    "away": "Katar",
+    "venueId": "vancouver"
+  },
+  {
+    "date": "2026-06-18",
+    "time": "19:00",
+    "group": "Gruppe A",
+    "stage": "GROUP_STAGE",
+    "status": "SCHEDULED",
+    "home": "Mexiko",
+    "away": "Korea Republik",
+    "venueId": "guadalajara"
+  }
+]

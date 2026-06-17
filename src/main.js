@@ -17,22 +17,14 @@ const venues = [
   { id: "vancouver", city: "Vancouver", country: "Kanada", stadium: "BC Place Vancouver", tz: "America/Vancouver", lat: 49.2767, lng: -123.1119 }
 ];
 
-const matches = [
-  { date: "2026-06-17", time: "12:00", group: "Gruppe L", home: "Ghana", away: "Panama", venueId: "toronto" },
-  { date: "2026-06-17", time: "15:00", group: "Gruppe L", home: "England", away: "Kroatien", venueId: "dallas" },
-  { date: "2026-06-17", time: "18:00", group: "Gruppe K", home: "Portugal", away: "DR Kongo", venueId: "houston" },
-  { date: "2026-06-17", time: "19:00", group: "Gruppe K", home: "Usbekistan", away: "Kolumbien", venueId: "mexico-city" },
-  { date: "2026-06-18", time: "12:00", group: "Gruppe A", home: "Tschechien", away: "Suedafrika", venueId: "atlanta" },
-  { date: "2026-06-18", time: "15:00", group: "Gruppe B", home: "Schweiz", away: "Bosnien und Herzegowina", venueId: "los-angeles" },
-  { date: "2026-06-18", time: "18:00", group: "Gruppe B", home: "Kanada", away: "Katar", venueId: "vancouver" },
-  { date: "2026-06-18", time: "19:00", group: "Gruppe A", home: "Mexiko", away: "Korea Republik", venueId: "guadalajara" }
-];
-
 const timeFormatterCache = new Map();
 const dateFormatterCache = new Map();
 const venueById = new Map(venues.map((venue) => [venue.id, venue]));
-const todayMatchVenueIds = new Set(matches.filter((match) => match.date === localIsoDate(new Date())).map((match) => match.venueId));
 const markerByVenue = new Map();
+let matches = [];
+let matchSource = "local";
+let matchWarning = "";
+let selectedDate = localIsoDate(new Date());
 let selectedVenueId = "dallas";
 let map;
 
@@ -73,6 +65,11 @@ function zonedMatchDate(match) {
   const venue = venueById.get(match.venueId);
   const [year, month, day] = match.date.split("-").map(Number);
   const [hour, minute] = match.time.split(":").map(Number);
+
+  if (!venue) {
+    return new Date(Date.UTC(year, month - 1, day, hour, minute));
+  }
+
   const roughUtc = new Date(Date.UTC(year, month - 1, day, hour, minute));
   const localParts = new Intl.DateTimeFormat("en-US", {
     timeZone: venue.tz,
@@ -97,6 +94,31 @@ function matchStatus(match, now = new Date()) {
   return { label: "Beendet", state: "finished" };
 }
 
+async function loadMatches(date) {
+  const response = await fetch(`/api/matches?date=${encodeURIComponent(date)}`, { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error(`Spieldaten konnten nicht geladen werden: ${response.status}`);
+  }
+  const payload = await response.json();
+  matches = payload.matches || [];
+  matchSource = payload.source || "unknown";
+  matchWarning = payload.warning || "";
+}
+
+function matchesForSelectedDate() {
+  return matches
+    .sort((left, right) => zonedMatchDate(left) - zonedMatchDate(right));
+}
+
+function updateMarkerHighlights() {
+  const matchVenueIds = new Set(matchesForSelectedDate().map((match) => match.venueId));
+  for (const venue of venues) {
+    const marker = markerByVenue.get(venue.id);
+    const markerNode = marker?.getElement()?.querySelector("span");
+    markerNode?.classList.toggle("has-match", matchVenueIds.has(venue.id));
+  }
+}
+
 function renderVenueList() {
   const list = document.querySelector("#venue-list");
   list.innerHTML = "";
@@ -119,14 +141,42 @@ function renderVenueList() {
   }
 }
 
+function setMatchLoading(isLoading) {
+  const list = document.querySelector("#match-list");
+  list.classList.toggle("loading", isLoading);
+  if (isLoading) {
+    list.innerHTML = '<div class="empty-state">Spiele werden geladen...</div>';
+  }
+}
+
+async function refreshMatches() {
+  setMatchLoading(true);
+  try {
+    await loadMatches(selectedDate);
+    renderMatches();
+  } catch (error) {
+    const list = document.querySelector("#match-list");
+    list.innerHTML = `<div class="empty-state">${error.message}</div>`;
+  } finally {
+    setMatchLoading(false);
+  }
+}
+
 function renderMatches() {
   const now = new Date();
-  const today = localIsoDate(now);
-  const relevant = matches
-    .filter((match) => match.date >= today)
-    .slice(0, 8);
+  const relevant = matchesForSelectedDate();
   const list = document.querySelector("#match-list");
   list.innerHTML = "";
+
+  updateMarkerHighlights();
+
+  if (relevant.length === 0) {
+    const empty = document.createElement("div");
+    empty.className = "empty-state";
+    empty.textContent = "Fuer dieses Datum sind keine Spiele hinterlegt.";
+    list.appendChild(empty);
+    return;
+  }
 
   for (const match of relevant) {
     const venue = venueById.get(match.venueId);
@@ -134,17 +184,21 @@ function renderMatches() {
     const status = matchStatus(match, now);
     const card = document.createElement("article");
     card.className = "match-card";
+    const venueText = venue ? `${match.time} Ortszeit, ${venue.city}` : `${formatTime(start, "Europe/Vienna")} Wien`;
+    const mapButton = venue
+      ? `<button class="map-link" type="button" data-venue-id="${venue.id}">Auf Karte zeigen</button>`
+      : `<span class="map-link disabled">${match.venueName || "Spielort noch offen"}</span>`;
     card.innerHTML = `
       <div class="match-meta">
         <span class="status ${status.state}">${status.label}</span>
-        <span>${match.group}</span>
+        <span>${match.group || match.stage}</span>
       </div>
       <h3>${match.home} <span>vs</span> ${match.away}</h3>
       <div class="match-detail">
         <span>${formatDate(start, "Europe/Vienna")}, ${formatTime(start, "Europe/Vienna")} Wien</span>
-        <span>${match.time} Ortszeit, ${venue.city}</span>
+        <span>${venueText}</span>
       </div>
-      <button class="map-link" type="button" data-venue-id="${venue.id}">Auf Karte zeigen</button>
+      ${mapButton}
     `;
     list.appendChild(card);
   }
@@ -170,7 +224,7 @@ function createMap() {
   for (const venue of venues) {
     const icon = L.divIcon({
       className: "venue-marker",
-      html: `<span class="${todayMatchVenueIds.has(venue.id) ? "has-match" : ""}"></span>`,
+      html: "<span></span>",
       iconSize: [28, 28],
       iconAnchor: [14, 14]
     });
@@ -203,7 +257,7 @@ function tick() {
   const now = new Date();
   document.querySelector("#local-time").textContent = formatTime(now, Intl.DateTimeFormat().resolvedOptions().timeZone, true);
   document.querySelector("#local-date").textContent = formatDate(now, Intl.DateTimeFormat().resolvedOptions().timeZone);
-  document.querySelector("#data-stamp").textContent = `Stand: ${formatDate(now, "Europe/Vienna")} ${formatTime(now, "Europe/Vienna")}`;
+  document.querySelector("#data-stamp").textContent = `Quelle: ${matchSource}${matchWarning ? " (Fallback)" : ""}`;
 
   for (const venue of venues) {
     const time = formatTime(now, venue.tz, true);
@@ -215,10 +269,18 @@ function tick() {
   renderMatches();
 }
 
-function boot() {
+async function boot() {
+  const dateInput = document.querySelector("#match-date");
+  dateInput.value = selectedDate;
+  dateInput.addEventListener("change", async () => {
+    selectedDate = dateInput.value || localIsoDate(new Date());
+    await refreshMatches();
+  });
+
   renderVenueList();
   createMap();
   selectVenue(selectedVenueId, true);
+  await refreshMatches();
   tick();
   setInterval(tick, 1000);
 }
