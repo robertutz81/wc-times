@@ -17,6 +17,62 @@ const venues = [
   { id: "vancouver", city: "Vancouver", country: "Kanada", stadium: "BC Place Vancouver", tz: "America/Vancouver", lat: 49.2767, lng: -123.1119 }
 ];
 
+const openFootballUrl = "https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json";
+
+const venueAliases = new Map([
+  ["atlanta", "atlanta"],
+  ["atlanta stadium", "atlanta"],
+  ["mercedes-benz stadium", "atlanta"],
+  ["boston", "boston"],
+  ["boston stadium", "boston"],
+  ["gillette stadium", "boston"],
+  ["dallas", "dallas"],
+  ["dallas stadium", "dallas"],
+  ["at&t stadium", "dallas"],
+  ["guadalajara", "guadalajara"],
+  ["guadalajara (zapopan)", "guadalajara"],
+  ["estadio guadalajara", "guadalajara"],
+  ["estadio akron", "guadalajara"],
+  ["houston", "houston"],
+  ["houston stadium", "houston"],
+  ["nrg stadium", "houston"],
+  ["kansas city", "kansas-city"],
+  ["kansas city stadium", "kansas-city"],
+  ["arrowhead stadium", "kansas-city"],
+  ["los angeles", "los-angeles"],
+  ["los angeles stadium", "los-angeles"],
+  ["sofi stadium", "los-angeles"],
+  ["mexico city", "mexico-city"],
+  ["mexico city stadium", "mexico-city"],
+  ["estadio azteca", "mexico-city"],
+  ["estadio banorte", "mexico-city"],
+  ["miami", "miami"],
+  ["miami stadium", "miami"],
+  ["hard rock stadium", "miami"],
+  ["monterrey", "monterrey"],
+  ["estadio monterrey", "monterrey"],
+  ["estadio bbva", "monterrey"],
+  ["new york/new jersey", "new-york-new-jersey"],
+  ["new york/new jersey (east rutherford)", "new-york-new-jersey"],
+  ["new york new jersey stadium", "new-york-new-jersey"],
+  ["metlife stadium", "new-york-new-jersey"],
+  ["philadelphia", "philadelphia"],
+  ["philadelphia stadium", "philadelphia"],
+  ["lincoln financial field", "philadelphia"],
+  ["san francisco bay area", "san-francisco"],
+  ["san francisco bay area stadium", "san-francisco"],
+  ["levi's stadium", "san-francisco"],
+  ["seattle", "seattle"],
+  ["seattle stadium", "seattle"],
+  ["lumen field", "seattle"],
+  ["toronto", "toronto"],
+  ["toronto stadium", "toronto"],
+  ["bmo field", "toronto"],
+  ["vancouver", "vancouver"],
+  ["bc place vancouver", "vancouver"],
+  ["bc place", "vancouver"]
+]);
+
 const timeFormatterCache = new Map();
 const dateFormatterCache = new Map();
 const venueById = new Map(venues.map((venue) => [venue.id, venue]));
@@ -53,6 +109,15 @@ function formatDate(date, timeZone) {
   }).format(date);
 }
 
+function formatTimeZoneName(timeZone) {
+  return formatter(dateFormatterCache, "de-AT", {
+    timeZone,
+    timeZoneName: "short"
+  })
+    .formatToParts(new Date())
+    .find((part) => part.type === "timeZoneName")?.value || timeZone;
+}
+
 function localIsoDate(date) {
   return formatter(dateFormatterCache, "en-CA", {
     year: "numeric",
@@ -66,7 +131,7 @@ function zonedMatchDate(match) {
   const [year, month, day] = match.date.split("-").map(Number);
   const [hour, minute] = match.time.split(":").map(Number);
 
-  if (!venue) {
+  if (match.timeZone === "UTC" || !venue) {
     return new Date(Date.UTC(year, month - 1, day, hour, minute));
   }
 
@@ -94,15 +159,84 @@ function matchStatus(match, now = new Date()) {
   return { label: "Beendet", state: "finished" };
 }
 
-async function loadMatches(date) {
-  const response = await fetch(`/api/matches?date=${encodeURIComponent(date)}`, { cache: "no-store" });
-  if (!response.ok) {
-    throw new Error(`Spieldaten konnten nicht geladen werden: ${response.status}`);
+function venueIdFromName(venueName) {
+  const normalized = (venueName || "").toLowerCase();
+  for (const [alias, venueId] of venueAliases.entries()) {
+    if (normalized.includes(alias)) {
+      return venueId;
+    }
   }
+  return null;
+}
+
+function utcPartsFromOpenFootball(date, time) {
+  const parsedTime = /^(\d{1,2}):(\d{2})(?:\s+UTC([+-]\d{1,2}))?$/.exec(time || "");
+  if (!parsedTime) {
+    return { date, time: "00:00" };
+  }
+
+  const [, hourText, minuteText, offsetText] = parsedTime;
+  const [year, month, day] = date.split("-").map(Number);
+  const hour = Number(hourText);
+  const minute = Number(minuteText);
+  const offset = offsetText === undefined ? 0 : Number(offsetText);
+  const utcDate = new Date(Date.UTC(year, month - 1, day, hour - offset, minute));
+
+  return {
+    date: utcDate.toISOString().slice(0, 10),
+    time: utcDate.toISOString().slice(11, 16)
+  };
+}
+
+function normalizeOpenFootballMatch(match, index) {
+  const utc = utcPartsFromOpenFootball(match.date, match.time);
+  return {
+    date: utc.date,
+    time: utc.time,
+    timeZone: "UTC",
+    group: match.group || match.round || "World Cup",
+    stage: match.round || match.group || "UNKNOWN",
+    status: match.score ? "FINISHED" : "SCHEDULED",
+    home: match.team1 || "TBD",
+    away: match.team2 || "TBD",
+    venueId: venueIdFromName(match.ground),
+    venueName: match.ground || null,
+    sourceId: `openfootball-2026-${index + 1}`
+  };
+}
+
+async function loadOpenFootballMatches(date) {
+  const response = await fetch(openFootballUrl, { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error(`openfootball returned ${response.status}`);
+  }
+
   const payload = await response.json();
-  matches = payload.matches || [];
-  matchSource = payload.source || "unknown";
-  matchWarning = payload.warning || "";
+  return (payload.matches || [])
+    .filter((match) => match.date === date)
+    .map(normalizeOpenFootballMatch);
+}
+
+async function loadLocalMatches(date) {
+  const response = await fetch("src/matches.json", { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error(`Lokale Spieldaten konnten nicht geladen werden: ${response.status}`);
+  }
+
+  const localMatches = await response.json();
+  return localMatches.filter((match) => match.date === date);
+}
+
+async function loadMatches(date) {
+  try {
+    matches = await loadOpenFootballMatches(date);
+    matchSource = "openfootball/worldcup.json";
+    matchWarning = "";
+  } catch (error) {
+    matches = await loadLocalMatches(date);
+    matchSource = "local-fallback";
+    matchWarning = error.message;
+  }
 }
 
 function matchesForSelectedDate() {
@@ -164,6 +298,7 @@ async function refreshMatches() {
 
 function renderMatches() {
   const now = new Date();
+  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const relevant = matchesForSelectedDate();
   const list = document.querySelector("#match-list");
   list.innerHTML = "";
@@ -184,19 +319,33 @@ function renderMatches() {
     const status = matchStatus(match, now);
     const card = document.createElement("article");
     card.className = "match-card";
-    const venueText = venue ? `${match.time} Ortszeit, ${venue.city}` : `${formatTime(start, "Europe/Vienna")} Wien`;
+    const venueTimeZone = venue?.tz || "UTC";
+    const venueTimeLabel = venue ? "Zeit am Spielort" : "API-Zeit";
+    const venueLabel = venue ? `${venue.city} (${formatTimeZoneName(venueTimeZone)})` : match.venueName || "Spielort nicht geliefert";
+    const venueTime = venue ? formatTime(start, venueTimeZone) : `${formatTime(start, "UTC")} UTC`;
+    const userTime = `${formatDate(start, userTimeZone)}, ${formatTime(start, userTimeZone)}`;
     const mapButton = venue
       ? `<button class="map-link" type="button" data-venue-id="${venue.id}">Auf Karte zeigen</button>`
-      : `<span class="map-link disabled">${match.venueName || "Spielort noch offen"}</span>`;
+      : match.venueName
+        ? `<span class="venue-note">${match.venueName}</span>`
+        : "";
     card.innerHTML = `
       <div class="match-meta">
         <span class="status ${status.state}">${status.label}</span>
         <span>${match.group || match.stage}</span>
       </div>
       <h3>${match.home} <span>vs</span> ${match.away}</h3>
-      <div class="match-detail">
-        <span>${formatDate(start, "Europe/Vienna")}, ${formatTime(start, "Europe/Vienna")} Wien</span>
-        <span>${venueText}</span>
+      <div class="kickoff-times">
+        <span>
+          <small>${venueTimeLabel}</small>
+          <strong>${venueTime}</strong>
+          <em>${venueLabel}</em>
+        </span>
+        <span>
+          <small>Meine Zeit</small>
+          <strong>${userTime}</strong>
+          <em>${formatTimeZoneName(userTimeZone)}</em>
+        </span>
       </div>
       ${mapButton}
     `;
