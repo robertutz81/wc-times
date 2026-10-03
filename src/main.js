@@ -1,4 +1,4 @@
-const venues = [
+const worldCupVenues = [
   { id: "atlanta", city: "Atlanta", country: "USA", stadium: "Atlanta Stadium", tz: "America/New_York", lat: 33.7554, lng: -84.4008 },
   { id: "boston", city: "Boston", country: "USA", stadium: "Boston Stadium", tz: "America/New_York", lat: 42.0909, lng: -71.2643 },
   { id: "dallas", city: "Dallas", country: "USA", stadium: "Dallas Stadium", tz: "America/Chicago", lat: 32.7473, lng: -97.0945 },
@@ -18,6 +18,40 @@ const venues = [
 ];
 
 const openFootballUrl = "https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json";
+const espnNflUrl = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
+
+const nflVenues = [
+  { id: "state-farm-stadium", city: "Glendale", country: "USA", stadium: "State Farm Stadium", tz: "America/Phoenix", lat: 33.5276, lng: -112.2626 },
+  { id: "mercedes-benz-stadium", city: "Atlanta", country: "USA", stadium: "Mercedes-Benz Stadium", tz: "America/New_York", lat: 33.7554, lng: -84.4008 },
+  { id: "m-t-bank-stadium", city: "Baltimore", country: "USA", stadium: "M&T Bank Stadium", tz: "America/New_York", lat: 39.278, lng: -76.6227 },
+  { id: "highmark-stadium", city: "Orchard Park", country: "USA", stadium: "Highmark Stadium", tz: "America/New_York", lat: 42.7738, lng: -78.787 },
+  { id: "bank-of-america-stadium", city: "Charlotte", country: "USA", stadium: "Bank of America Stadium", tz: "America/New_York", lat: 35.2258, lng: -80.8528 },
+  { id: "soldier-field", city: "Chicago", country: "USA", stadium: "Soldier Field", tz: "America/Chicago", lat: 41.8623, lng: -87.6167 },
+  { id: "paycor-stadium", city: "Cincinnati", country: "USA", stadium: "Paycor Stadium", tz: "America/New_York", lat: 39.0954, lng: -84.516 },
+  { id: "cleveland-browns-stadium", city: "Cleveland", country: "USA", stadium: "Cleveland Browns Stadium", tz: "America/New_York", lat: 41.5061, lng: -81.6995 },
+  { id: "at-t-stadium", city: "Arlington", country: "USA", stadium: "AT&T Stadium", tz: "America/Chicago", lat: 32.7473, lng: -97.0945 },
+  { id: "empower-field-at-mile-high", city: "Denver", country: "USA", stadium: "Empower Field at Mile High", tz: "America/Denver", lat: 39.7439, lng: -105.02 },
+  { id: "ford-field", city: "Detroit", country: "USA", stadium: "Ford Field", tz: "America/Detroit", lat: 42.34, lng: -83.0456 },
+  { id: "lambeau-field", city: "Green Bay", country: "USA", stadium: "Lambeau Field", tz: "America/Chicago", lat: 44.5013, lng: -88.0622 },
+  { id: "nrg-stadium", city: "Houston", country: "USA", stadium: "NRG Stadium", tz: "America/Chicago", lat: 29.6847, lng: -95.4107 },
+  { id: "lucas-oil-stadium", city: "Indianapolis", country: "USA", stadium: "Lucas Oil Stadium", tz: "America/Indiana/Indianapolis", lat: 39.7601, lng: -86.1639 },
+  { id: "everbank-stadium", city: "Jacksonville", country: "USA", stadium: "EverBank Stadium", tz: "America/New_York", lat: 30.3239, lng: -81.6373 },
+  { id: "geha-field-at-arrowhead-stadium", city: "Kansas City", country: "USA", stadium: "GEHA Field at Arrowhead Stadium", tz: "America/Chicago", lat: 39.0489, lng: -94.4839 },
+  { id: "allegiant-stadium", city: "Las Vegas", country: "USA", stadium: "Allegiant Stadium", tz: "America/Los_Angeles", lat: 36.0909, lng: -115.1833 },
+  { id: "sofi-stadium", city: "Inglewood", country: "USA", stadium: "SoFi Stadium", tz: "America/Los_Angeles", lat: 33.9535, lng: -118.3392 },
+  { id: "hard-rock-stadium", city: "Miami Gardens", country: "USA", stadium: "Hard Rock Stadium", tz: "America/New_York", lat: 25.958, lng: -80.2389 },
+  { id: "u-s-bank-stadium", city: "Minneapolis", country: "USA", stadium: "U.S. Bank Stadium", tz: "America/Chicago", lat: 44.9738, lng: -93.2575 },
+  { id: "gillette-stadium", city: "Foxborough", country: "USA", stadium: "Gillette Stadium", tz: "America/New_York", lat: 42.0909, lng: -71.2643 },
+  { id: "caesars-superdome", city: "New Orleans", country: "USA", stadium: "Caesars Superdome", tz: "America/Chicago", lat: 29.9511, lng: -90.0812 },
+  { id: "metlife-stadium", city: "East Rutherford", country: "USA", stadium: "MetLife Stadium", tz: "America/New_York", lat: 40.8135, lng: -74.0745 },
+  { id: "lincoln-financial-field", city: "Philadelphia", country: "USA", stadium: "Lincoln Financial Field", tz: "America/New_York", lat: 39.9008, lng: -75.1675 },
+  { id: "acrisure-stadium", city: "Pittsburgh", country: "USA", stadium: "Acrisure Stadium", tz: "America/New_York", lat: 40.4468, lng: -80.0158 },
+  { id: "levis-stadium", city: "Santa Clara", country: "USA", stadium: "Levi's Stadium", tz: "America/Los_Angeles", lat: 37.403, lng: -121.97 },
+  { id: "lumen-field", city: "Seattle", country: "USA", stadium: "Lumen Field", tz: "America/Los_Angeles", lat: 47.5952, lng: -122.3316 },
+  { id: "raymond-james-stadium", city: "Tampa", country: "USA", stadium: "Raymond James Stadium", tz: "America/New_York", lat: 27.9759, lng: -82.5033 },
+  { id: "nissan-stadium", city: "Nashville", country: "USA", stadium: "Nissan Stadium", tz: "America/Chicago", lat: 36.1665, lng: -86.7713 },
+  { id: "northwest-stadium", city: "Landover", country: "USA", stadium: "Northwest Stadium", tz: "America/New_York", lat: 38.9076, lng: -76.8645 }
+];
 
 const venueAliases = new Map([
   ["atlanta", "atlanta"],
@@ -75,14 +109,19 @@ const venueAliases = new Map([
 
 const timeFormatterCache = new Map();
 const dateFormatterCache = new Map();
-const venueById = new Map(venues.map((venue) => [venue.id, venue]));
+const venueById = new Map([...worldCupVenues, ...nflVenues].map((venue) => [venue.id, venue]));
 const markerByVenue = new Map();
 let matches = [];
-let matchSource = "local";
+let matchSource = "ESPN";
 let matchWarning = "";
 let selectedDate = localIsoDate(new Date());
-let selectedVenueId = "dallas";
+let selectedCompetition = "nfl";
+let selectedVenueId = "at-t-stadium";
 let map;
+
+function activeVenues() {
+  return selectedCompetition === "nfl" ? nflVenues : worldCupVenues;
+}
 
 function formatter(cache, locale, options) {
   const key = JSON.stringify([locale, options]);
@@ -152,8 +191,10 @@ function zonedMatchDate(match) {
 }
 
 function matchStatus(match, now = new Date()) {
+  if (match.statusState === "in") return { label: "Live", state: "live" };
+  if (match.statusState === "post") return { label: "Beendet", state: "finished" };
   const start = zonedMatchDate(match);
-  const end = new Date(start.getTime() + 115 * 60 * 1000);
+  const end = new Date(start.getTime() + (match.sport === "nfl" ? 4 : 115) * 60 * 60 * 1000);
   if (now < start) return { label: "Bald", state: "upcoming" };
   if (now <= end) return { label: "Live", state: "live" };
   return { label: "Beendet", state: "finished" };
@@ -205,6 +246,35 @@ function normalizeOpenFootballMatch(match, index) {
   };
 }
 
+function nflVenueId(venueName) {
+  const normalized = (venueName || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  return nflVenues.find((venue) => venue.stadium.toLowerCase().replace(/[^a-z0-9]/g, "") === normalized)?.id || null;
+}
+
+function normalizeEspnNflMatch(event) {
+  const competition = event.competitions?.[0];
+  const competitors = competition?.competitors || [];
+  const home = competitors.find((competitor) => competitor.homeAway === "home")?.team?.displayName || "TBD";
+  const away = competitors.find((competitor) => competitor.homeAway === "away")?.team?.displayName || "TBD";
+  const start = new Date(event.date);
+  const venueName = competition?.venue?.fullName || null;
+
+  return {
+    date: start.toISOString().slice(0, 10),
+    time: start.toISOString().slice(11, 16),
+    timeZone: "UTC",
+    group: event.season?.type === 1 ? "Preseason" : `NFL Woche ${event.week?.number || ""}`.trim(),
+    stage: "NFL",
+    home,
+    away,
+    venueId: nflVenueId(venueName),
+    venueName,
+    sourceId: `espn-nfl-${event.id}`,
+    sport: "nfl",
+    statusState: event.status?.type?.state
+  };
+}
+
 async function loadOpenFootballMatches(date) {
   const response = await fetch(openFootballUrl, { cache: "no-store" });
   if (!response.ok) {
@@ -227,7 +297,21 @@ async function loadLocalMatches(date) {
   return localMatches.filter((match) => match.date === date);
 }
 
+async function loadNflMatches(date) {
+  const response = await fetch(`${espnNflUrl}?dates=${date.replaceAll("-", "")}`, { cache: "no-store" });
+  if (!response.ok) throw new Error(`ESPN returned ${response.status}`);
+  const payload = await response.json();
+  return (payload.events || []).map(normalizeEspnNflMatch);
+}
+
 async function loadMatches(date) {
+  if (selectedCompetition === "nfl") {
+    matches = await loadNflMatches(date);
+    matchSource = "ESPN NFL";
+    matchWarning = "";
+    return;
+  }
+
   try {
     matches = await loadOpenFootballMatches(date);
     matchSource = "openfootball/worldcup.json";
@@ -246,7 +330,7 @@ function matchesForSelectedDate() {
 
 function updateMarkerHighlights() {
   const matchVenueIds = new Set(matchesForSelectedDate().map((match) => match.venueId));
-  for (const venue of venues) {
+  for (const venue of activeVenues()) {
     const marker = markerByVenue.get(venue.id);
     const markerNode = marker?.getElement()?.querySelector("span");
     markerNode?.classList.toggle("has-match", matchVenueIds.has(venue.id));
@@ -257,7 +341,7 @@ function renderVenueList() {
   const list = document.querySelector("#venue-list");
   list.innerHTML = "";
 
-  for (const venue of venues) {
+  for (const venue of activeVenues()) {
     const button = document.createElement("button");
     button.className = "venue-item";
     button.type = "button";
@@ -370,7 +454,16 @@ function createMap() {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
   }).addTo(map);
 
-  for (const venue of venues) {
+  renderMapVenues();
+
+  document.querySelector("#fit-map").addEventListener("click", fitMap);
+}
+
+function renderMapVenues() {
+  for (const marker of markerByVenue.values()) marker.remove();
+  markerByVenue.clear();
+
+  for (const venue of activeVenues()) {
     const icon = L.divIcon({
       className: "venue-marker",
       html: "<span></span>",
@@ -383,12 +476,11 @@ function createMap() {
     markerByVenue.set(venue.id, marker);
   }
 
-  document.querySelector("#fit-map").addEventListener("click", fitMap);
   fitMap();
 }
 
 function fitMap() {
-  const bounds = L.latLngBounds(venues.map((venue) => [venue.lat, venue.lng]));
+  const bounds = L.latLngBounds(activeVenues().map((venue) => [venue.lat, venue.lng]));
   map.fitBounds(bounds.pad(0.12));
 }
 
@@ -398,6 +490,7 @@ function selectVenue(venueId, openPopup) {
   document.querySelectorAll(".venue-item").forEach((item) => {
     item.classList.toggle("active", item.dataset.venueId === venueId);
   });
+  if (!venue) return;
   map.flyTo([venue.lat, venue.lng], Math.max(map.getZoom(), 6), { duration: 0.6 });
   if (openPopup) markerByVenue.get(venueId).openPopup();
 }
@@ -408,7 +501,7 @@ function tick() {
   document.querySelector("#local-date").textContent = formatDate(now, Intl.DateTimeFormat().resolvedOptions().timeZone);
   document.querySelector("#data-stamp").textContent = `Quelle: ${matchSource}${matchWarning ? " (Fallback)" : ""}`;
 
-  for (const venue of venues) {
+  for (const venue of activeVenues()) {
     const time = formatTime(now, venue.tz, true);
     document.querySelectorAll(`[data-time="${venue.id}"], [data-popup-time="${venue.id}"]`).forEach((node) => {
       node.textContent = time;
@@ -420,18 +513,40 @@ function tick() {
 
 async function boot() {
   const dateInput = document.querySelector("#match-date");
+  const competitionInput = document.querySelector("#competition");
   dateInput.value = selectedDate;
   dateInput.addEventListener("change", async () => {
     selectedDate = dateInput.value || localIsoDate(new Date());
     await refreshMatches();
   });
+  competitionInput.value = selectedCompetition;
+  competitionInput.addEventListener("change", async () => {
+    selectedCompetition = competitionInput.value;
+    selectedVenueId = activeVenues()[0].id;
+    updateCompetitionLabels();
+    renderVenueList();
+    renderMapVenues();
+    selectVenue(selectedVenueId, true);
+    await refreshMatches();
+  });
 
+  updateCompetitionLabels();
   renderVenueList();
   createMap();
   selectVenue(selectedVenueId, true);
   await refreshMatches();
   tick();
   setInterval(tick, 1000);
+}
+
+function updateCompetitionLabels() {
+  const isNfl = selectedCompetition === "nfl";
+  const label = isNfl ? "NFL" : "FIFA World Cup 2026";
+  document.querySelector("#hero-eyebrow").textContent = label;
+  document.querySelector("#page-title").textContent = `Zeiten der ${isNfl ? "NFL" : "WM"}-Spielorte`;
+  document.querySelector("#venues-title").textContent = `${isNfl ? "NFL" : "WM"}-Spielorte`;
+  document.querySelector("#matches-eyebrow").textContent = `${label} Spieltag`;
+  document.querySelector("#matches-title").textContent = `${isNfl ? "NFL" : "WM"}-Spiele nach Datum`;
 }
 
 if (window.L) {

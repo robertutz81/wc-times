@@ -420,7 +420,8 @@ h1 {
   font-weight: 700;
 }
 
-.match-controls input {
+.match-controls input,
+.match-controls select {
   min-height: 38px;
   padding: 7px 10px;
   border: 1px solid var(--line);
@@ -430,7 +431,8 @@ h1 {
   font: inherit;
 }
 
-.match-controls input:focus {
+.match-controls input:focus,
+.match-controls select:focus {
   border-color: var(--green);
   outline: 2px solid rgba(15, 122, 95, 0.16);
 }

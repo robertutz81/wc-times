@@ -1,8 +1,9 @@
-# WM Zeiten
+# Spielzeiten: NFL & WM
 
-Eine kleine Web-App fuer die FIFA World Cup 2026 Spielorte:
+Eine kleine Web-App fuer NFL- und FIFA-World-Cup-2026-Spielorte:
 
-- Live-Ortszeit aller 16 Spielorte
+- Umschaltung zwischen NFL und FIFA World Cup 2026
+- Live-Ortszeit der Spielorte
 - Leaflet-Karte mit Stadion-Markern
 - dynamisch geladene Spieleliste nach ausgewaehltem Datum
 - Direkte Karten-Navigation aus der Spieleliste
@@ -32,4 +33,6 @@ Der Browser laedt die Spiele direkt aus `openfootball/worldcup.json`:
 https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json
 ```
 
-Die Quelle benoetigt keinen API-Key. Wenn Openfootball nicht erreichbar ist, verwendet die App `src/matches.json` als lokalen Fallback.
+Die WM-Daten werden aus OpenFootball geladen. Wenn OpenFootball nicht erreichbar ist, verwendet die App `src/matches.json` als lokalen Fallback.
+
+NFL-Spiele werden tagesaktuell aus der frei zugänglichen ESPN-Scoreboard-API geladen; dafür ist ebenfalls kein API-Key nötig.
