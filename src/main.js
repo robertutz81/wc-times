@@ -19,6 +19,7 @@ const worldCupVenues = [
 
 const openFootballUrl = "https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json";
 const espnNflUrl = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
+const espnNhlUrl = "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard";
 
 const nflVenues = [
   { id: "state-farm-stadium", city: "Glendale", country: "USA", stadium: "State Farm Stadium", tz: "America/Phoenix", lat: 33.5276, lng: -112.2626 },
@@ -51,6 +52,41 @@ const nflVenues = [
   { id: "raymond-james-stadium", city: "Tampa", country: "USA", stadium: "Raymond James Stadium", tz: "America/New_York", lat: 27.9759, lng: -82.5033 },
   { id: "nissan-stadium", city: "Nashville", country: "USA", stadium: "Nissan Stadium", tz: "America/Chicago", lat: 36.1665, lng: -86.7713 },
   { id: "northwest-stadium", city: "Landover", country: "USA", stadium: "Northwest Stadium", tz: "America/New_York", lat: 38.9076, lng: -76.8645 }
+];
+
+const nhlVenues = [
+  { id: "honda-center", city: "Anaheim", country: "USA", stadium: "Honda Center", tz: "America/Los_Angeles", lat: 33.8078, lng: -117.8765 },
+  { id: "td-garden", city: "Boston", country: "USA", stadium: "TD Garden", tz: "America/New_York", lat: 42.3662, lng: -71.0621 },
+  { id: "keybank-center", city: "Buffalo", country: "USA", stadium: "KeyBank Center", tz: "America/New_York", lat: 42.875, lng: -78.8766 },
+  { id: "scotiabank-saddledome", city: "Calgary", country: "Kanada", stadium: "Scotiabank Saddledome", tz: "America/Edmonton", lat: 51.0374, lng: -114.0519 },
+  { id: "lenovo-center", city: "Raleigh", country: "USA", stadium: "Lenovo Center", tz: "America/New_York", lat: 35.8033, lng: -78.7218 },
+  { id: "united-center", city: "Chicago", country: "USA", stadium: "United Center", tz: "America/Chicago", lat: 41.8807, lng: -87.6742 },
+  { id: "ball-arena", city: "Denver", country: "USA", stadium: "Ball Arena", tz: "America/Denver", lat: 39.7487, lng: -105.0077 },
+  { id: "nationwide-arena", city: "Columbus", country: "USA", stadium: "Nationwide Arena", tz: "America/New_York", lat: 39.969, lng: -83.0064 },
+  { id: "american-airlines-center", city: "Dallas", country: "USA", stadium: "American Airlines Center", tz: "America/Chicago", lat: 32.7905, lng: -96.8103 },
+  { id: "little-caesars-arena", city: "Detroit", country: "USA", stadium: "Little Caesars Arena", tz: "America/Detroit", lat: 42.341, lng: -83.055 },
+  { id: "rogers-place", city: "Edmonton", country: "Kanada", stadium: "Rogers Place", tz: "America/Edmonton", lat: 53.5469, lng: -113.4979 },
+  { id: "amerant-bank-arena", city: "Sunrise", country: "USA", stadium: "Amerant Bank Arena", tz: "America/New_York", lat: 26.1584, lng: -80.3258 },
+  { id: "crypto-com-arena", city: "Los Angeles", country: "USA", stadium: "Crypto.com Arena", tz: "America/Los_Angeles", lat: 34.043, lng: -118.2673 },
+  { id: "grand-casino-arena", city: "Saint Paul", country: "USA", stadium: "Grand Casino Arena", tz: "America/Chicago", lat: 44.9449, lng: -93.1011 },
+  { id: "bell-centre", city: "Montreal", country: "Kanada", stadium: "Bell Centre", tz: "America/Toronto", lat: 45.4961, lng: -73.5693 },
+  { id: "bridgestone-arena", city: "Nashville", country: "USA", stadium: "Bridgestone Arena", tz: "America/Chicago", lat: 36.1591, lng: -86.7785 },
+  { id: "prudential-center", city: "Newark", country: "USA", stadium: "Prudential Center", tz: "America/New_York", lat: 40.7336, lng: -74.171 },
+  { id: "ubs-arena", city: "Elmont", country: "USA", stadium: "UBS Arena", tz: "America/New_York", lat: 40.7229, lng: -73.5906 },
+  { id: "madison-square-garden", city: "New York", country: "USA", stadium: "Madison Square Garden", tz: "America/New_York", lat: 40.7505, lng: -73.9934 },
+  { id: "canadian-tire-centre", city: "Ottawa", country: "Kanada", stadium: "Canadian Tire Centre", tz: "America/Toronto", lat: 45.2969, lng: -75.9272 },
+  { id: "xfinity-mobile-arena", city: "Philadelphia", country: "USA", stadium: "Xfinity Mobile Arena", tz: "America/New_York", lat: 39.9012, lng: -75.172 },
+  { id: "ppg-paints-arena", city: "Pittsburgh", country: "USA", stadium: "PPG Paints Arena", tz: "America/New_York", lat: 40.4395, lng: -79.9892 },
+  { id: "sap-center", city: "San Jose", country: "USA", stadium: "SAP Center", tz: "America/Los_Angeles", lat: 37.3328, lng: -121.9012 },
+  { id: "climate-pledge-arena", city: "Seattle", country: "USA", stadium: "Climate Pledge Arena", tz: "America/Los_Angeles", lat: 47.6221, lng: -122.354 },
+  { id: "enterprise-center", city: "St. Louis", country: "USA", stadium: "Enterprise Center", tz: "America/Chicago", lat: 38.6268, lng: -90.2026 },
+  { id: "benchmark-international-arena", city: "Tampa", country: "USA", stadium: "Benchmark International Arena", tz: "America/New_York", lat: 27.9427, lng: -82.4518 },
+  { id: "scotiabank-arena", city: "Toronto", country: "Kanada", stadium: "Scotiabank Arena", tz: "America/Toronto", lat: 43.6435, lng: -79.3791 },
+  { id: "delta-center", city: "Salt Lake City", country: "USA", stadium: "Delta Center", tz: "America/Denver", lat: 40.7683, lng: -111.9011 },
+  { id: "rogers-arena", city: "Vancouver", country: "Kanada", stadium: "Rogers Arena", tz: "America/Vancouver", lat: 49.2778, lng: -123.1089 },
+  { id: "t-mobile-arena", city: "Las Vegas", country: "USA", stadium: "T-Mobile Arena", tz: "America/Los_Angeles", lat: 36.1029, lng: -115.1783 },
+  { id: "capital-one-arena", city: "Washington", country: "USA", stadium: "Capital One Arena", tz: "America/New_York", lat: 38.8981, lng: -77.0209 },
+  { id: "canada-life-centre", city: "Winnipeg", country: "Kanada", stadium: "Canada Life Centre", tz: "America/Winnipeg", lat: 49.8927, lng: -97.1435 }
 ];
 
 const venueAliases = new Map([
@@ -109,7 +145,7 @@ const venueAliases = new Map([
 
 const timeFormatterCache = new Map();
 const dateFormatterCache = new Map();
-const venueById = new Map([...worldCupVenues, ...nflVenues].map((venue) => [venue.id, venue]));
+const venueById = new Map([...worldCupVenues, ...nflVenues, ...nhlVenues].map((venue) => [venue.id, venue]));
 const markerByVenue = new Map();
 let matches = [];
 let matchSource = "ESPN";
@@ -120,7 +156,9 @@ let selectedVenueId = "at-t-stadium";
 let map;
 
 function activeVenues() {
-  return selectedCompetition === "nfl" ? nflVenues : worldCupVenues;
+  if (selectedCompetition === "nfl") return nflVenues;
+  if (selectedCompetition === "nhl") return nhlVenues;
+  return worldCupVenues;
 }
 
 function formatter(cache, locale, options) {
@@ -199,7 +237,8 @@ function matchStatus(match, now = new Date()) {
   if (match.statusState === "in") return { label: "Live", state: "live" };
   if (match.statusState === "post") return { label: "Beendet", state: "finished" };
   const start = zonedMatchDate(match);
-  const end = new Date(start.getTime() + (match.sport === "nfl" ? 4 : 115) * 60 * 60 * 1000);
+  const durationHours = match.sport === "nfl" ? 4 : match.sport === "nhl" ? 3 : 115 / 60;
+  const end = new Date(start.getTime() + durationHours * 60 * 60 * 1000);
   if (now < start) return { label: "Bald", state: "upcoming" };
   if (now <= end) return { label: "Live", state: "live" };
   return { label: "Beendet", state: "finished" };
@@ -256,6 +295,17 @@ function nflVenueId(venueName) {
   return nflVenues.find((venue) => venue.stadium.toLowerCase().replace(/[^a-z0-9]/g, "") === normalized)?.id || null;
 }
 
+function nhlVenueId(venueName) {
+  const normalized = (venueName || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  const aliases = new Map([
+    ["pncarena", "lenovo-center"],
+    ["xcelenergycenter", "grand-casino-arena"],
+    ["wellsfargocenter", "xfinity-mobile-arena"],
+    ["amaliearena", "benchmark-international-arena"]
+  ]);
+  return nhlVenues.find((venue) => normalized.includes(venue.stadium.toLowerCase().replace(/[^a-z0-9]/g, "")))?.id || aliases.get(normalized) || null;
+}
+
 function normalizeEspnNflMatch(event) {
   const competition = event.competitions?.[0];
   const competitors = competition?.competitors || [];
@@ -309,10 +359,48 @@ async function loadNflMatches(date) {
   return (payload.events || []).map(normalizeEspnNflMatch);
 }
 
+function normalizeEspnNhlMatch(event) {
+  const competition = event.competitions?.[0];
+  const competitors = competition?.competitors || [];
+  const home = competitors.find((competitor) => competitor.homeAway === "home")?.team?.displayName || "TBD";
+  const away = competitors.find((competitor) => competitor.homeAway === "away")?.team?.displayName || "TBD";
+  const start = new Date(event.date);
+  const venueName = competition?.venue?.fullName || null;
+
+  return {
+    date: start.toISOString().slice(0, 10),
+    time: start.toISOString().slice(11, 16),
+    timeZone: "UTC",
+    group: "NHL",
+    stage: "NHL",
+    home,
+    away,
+    venueId: nhlVenueId(venueName),
+    venueName,
+    sourceId: `espn-nhl-${event.id}`,
+    sport: "nhl",
+    statusState: event.status?.type?.state
+  };
+}
+
+async function loadNhlMatches(date) {
+  const response = await fetch(`${espnNhlUrl}?dates=${date.replaceAll("-", "")}`, { cache: "no-store" });
+  if (!response.ok) throw new Error(`ESPN returned ${response.status}`);
+  const payload = await response.json();
+  return (payload.events || []).map(normalizeEspnNhlMatch);
+}
+
 async function loadMatches(date) {
   if (selectedCompetition === "nfl") {
     matches = await loadNflMatches(date);
     matchSource = "ESPN NFL";
+    matchWarning = "";
+    return;
+  }
+
+  if (selectedCompetition === "nhl") {
+    matches = await loadNhlMatches(date);
+    matchSource = "ESPN NHL";
     matchWarning = "";
     return;
   }
@@ -580,12 +668,14 @@ async function boot() {
 
 function updateCompetitionLabels() {
   const isNfl = selectedCompetition === "nfl";
-  const label = isNfl ? "NFL" : "FIFA World Cup 2026";
+  const isNhl = selectedCompetition === "nhl";
+  const label = isNfl ? "NFL" : isNhl ? "NHL" : "FIFA World Cup 2026";
   document.querySelector("#hero-eyebrow").textContent = label;
-  document.querySelector("#page-title").textContent = `Zeiten der ${isNfl ? "NFL" : "WM"}-Spielorte`;
-  document.querySelector("#venues-title").textContent = `${isNfl ? "NFL" : "WM"}-Spielorte`;
+  const shortLabel = isNfl ? "NFL" : isNhl ? "NHL" : "WM";
+  document.querySelector("#page-title").textContent = `Zeiten der ${shortLabel}-Spielorte`;
+  document.querySelector("#venues-title").textContent = `${shortLabel}-Spielorte`;
   document.querySelector("#matches-eyebrow").textContent = `${label} Spieltag`;
-  document.querySelector("#matches-title").textContent = `${isNfl ? "NFL" : "WM"}-Spiele nach Datum`;
+  document.querySelector("#matches-title").textContent = `${shortLabel}-Spiele nach Datum`;
 }
 
 if (window.L) {
