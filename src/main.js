@@ -165,6 +165,11 @@ function localIsoDate(date) {
   }).format(date);
 }
 
+function shiftIsoDate(date, days) {
+  const [year, month, day] = date.split("-").map(Number);
+  return localIsoDate(new Date(year, month - 1, day + days));
+}
+
 function zonedMatchDate(match) {
   const venue = venueById.get(match.venueId);
   const [year, month, day] = match.date.split("-").map(Number);
@@ -515,11 +520,20 @@ async function boot() {
   const dateInput = document.querySelector("#match-date");
   const competitionInput = document.querySelector("#competition");
   const venueToggle = document.querySelector("#toggle-venues");
+  const previousDayButton = document.querySelector("#previous-day");
+  const nextDayButton = document.querySelector("#next-day");
+  const changeDateBy = async (days) => {
+    selectedDate = shiftIsoDate(selectedDate, days);
+    dateInput.value = selectedDate;
+    await refreshMatches();
+  };
   dateInput.value = selectedDate;
   dateInput.addEventListener("change", async () => {
     selectedDate = dateInput.value || localIsoDate(new Date());
     await refreshMatches();
   });
+  previousDayButton.addEventListener("click", () => changeDateBy(-1));
+  nextDayButton.addEventListener("click", () => changeDateBy(1));
   competitionInput.value = selectedCompetition;
   competitionInput.addEventListener("change", async () => {
     selectedCompetition = competitionInput.value;

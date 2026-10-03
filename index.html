@@ -70,7 +70,15 @@
               <option value="world-cup">FIFA World Cup 2026</option>
             </select>
             <label for="match-date">Datum</label>
-            <input id="match-date" type="date" />
+            <div class="date-navigator" aria-label="Datum wechseln">
+              <button id="previous-day" class="date-step" type="button" aria-label="Vortag anzeigen" title="Vortag">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15.5 5-7 7 7 7" /></svg>
+              </button>
+              <input id="match-date" type="date" />
+              <button id="next-day" class="date-step" type="button" aria-label="Nächsten Tag anzeigen" title="Nächster Tag">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8.5 5 7 7-7 7" /></svg>
+              </button>
+            </div>
             <span id="data-stamp" class="data-stamp"></span>
           </div>
         </div>

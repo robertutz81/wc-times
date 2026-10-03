@@ -435,6 +435,65 @@ h1 {
   font: inherit;
 }
 
+.date-step {
+  display: inline-grid;
+  width: 36px;
+  min-height: 36px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.date-step svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.date-step path {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.date-step:hover {
+  background: rgba(15, 122, 95, 0.08);
+  color: var(--green);
+}
+
+.date-navigator {
+  display: flex;
+  align-items: center;
+  min-height: 38px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8faf8;
+}
+
+.date-navigator:focus-within {
+  border-color: var(--green);
+  box-shadow: 0 0 0 2px rgba(15, 122, 95, 0.16);
+}
+
+.date-navigator input {
+  min-width: 132px;
+  min-height: 36px;
+  padding: 7px 8px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  outline: 0;
+  text-align: center;
+}
+
 .toggle-venues {
   min-height: 38px;
   padding: 7px 10px;
