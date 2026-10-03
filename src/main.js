@@ -514,6 +514,7 @@ function tick() {
 async function boot() {
   const dateInput = document.querySelector("#match-date");
   const competitionInput = document.querySelector("#competition");
+  const venueToggle = document.querySelector("#toggle-venues");
   dateInput.value = selectedDate;
   dateInput.addEventListener("change", async () => {
     selectedDate = dateInput.value || localIsoDate(new Date());
@@ -528,6 +529,12 @@ async function boot() {
     renderMapVenues();
     selectVenue(selectedVenueId, true);
     await refreshMatches();
+  });
+  venueToggle.addEventListener("click", () => {
+    const dashboard = document.querySelector(".dashboard");
+    const isHidden = dashboard.classList.toggle("is-hidden");
+    venueToggle.textContent = isHidden ? "Spielorte anzeigen" : "Spielorte ausblenden";
+    venueToggle.setAttribute("aria-expanded", String(!isHidden));
   });
 
   updateCompetitionLabels();
