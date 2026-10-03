@@ -36,3 +36,13 @@ https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcu
 Die WM-Daten werden aus OpenFootball geladen. Wenn OpenFootball nicht erreichbar ist, verwendet die App `src/matches.json` als lokalen Fallback.
 
 NFL- und NHL-Spiele werden tagesaktuell aus der frei zugänglichen ESPN-Scoreboard-API geladen; dafür ist ebenfalls kein API-Key nötig.
+
+## Struktur
+
+- `src/venues.js`: statische Spielorte und WM-Aliasnamen
+- `src/competitions.js`: Wettbewerbskonfiguration
+- `src/api.js`: Datenquellen und Normalisierung der Spieldaten
+- `src/time.js`: Datums-, Zeit- und Statusberechnung
+- `src/map.js`: Leaflet-Karte und Marker
+- `src/ui.js`: Listen, Spielkarten und Zeitanzeige
+- `src/main.js`: Anwendungsablauf und Ereignisbehandlung
