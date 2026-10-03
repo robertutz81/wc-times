@@ -447,6 +447,7 @@ function renderMatches() {
 }
 
 function createMap() {
+  if (map) return;
   map = L.map("map", {
     zoomControl: false,
     minZoom: 3,
@@ -465,6 +466,7 @@ function createMap() {
 }
 
 function renderMapVenues() {
+  if (!map) return;
   for (const marker of markerByVenue.values()) marker.remove();
   markerByVenue.clear();
 
@@ -485,6 +487,7 @@ function renderMapVenues() {
 }
 
 function fitMap() {
+  if (!map || document.querySelector(".dashboard").classList.contains("is-hidden")) return;
   const bounds = L.latLngBounds(activeVenues().map((venue) => [venue.lat, venue.lng]));
   map.fitBounds(bounds.pad(0.12));
 }
@@ -495,7 +498,7 @@ function selectVenue(venueId, openPopup) {
   document.querySelectorAll(".venue-item").forEach((item) => {
     item.classList.toggle("active", item.dataset.venueId === venueId);
   });
-  if (!venue) return;
+  if (!venue || !map || document.querySelector(".dashboard").classList.contains("is-hidden")) return;
   map.flyTo([venue.lat, venue.lng], Math.max(map.getZoom(), 6), { duration: 0.6 });
   if (openPopup) markerByVenue.get(venueId).openPopup();
 }
@@ -520,6 +523,7 @@ async function boot() {
   const dateInput = document.querySelector("#match-date");
   const competitionInput = document.querySelector("#competition");
   const venueToggle = document.querySelector("#toggle-venues");
+  const dashboard = document.querySelector(".dashboard");
   const previousDayButton = document.querySelector("#previous-day");
   const nextDayButton = document.querySelector("#next-day");
   const changeDateBy = async (days) => {
@@ -540,24 +544,38 @@ async function boot() {
     selectedVenueId = activeVenues()[0].id;
     updateCompetitionLabels();
     renderVenueList();
-    renderMapVenues();
-    selectVenue(selectedVenueId, true);
+    if (map) {
+      renderMapVenues();
+      selectVenue(selectedVenueId, true);
+    }
     await refreshMatches();
   });
-  venueToggle.addEventListener("click", () => {
-    const dashboard = document.querySelector(".dashboard");
-    const isHidden = dashboard.classList.toggle("is-hidden");
-    venueToggle.textContent = isHidden ? "Spielorte anzeigen" : "Spielorte ausblenden";
+  const updateVenueToggle = () => {
+    const isHidden = dashboard.classList.contains("is-hidden");
+    venueToggle.textContent = isHidden ? "Spielorte einblenden" : "Spielorte ausblenden";
     venueToggle.setAttribute("aria-expanded", String(!isHidden));
+  };
+  venueToggle.addEventListener("click", () => {
+    const isHidden = dashboard.classList.toggle("is-hidden");
+    updateVenueToggle();
+    if (!isHidden) {
+      createMap();
+      map.invalidateSize();
+      fitMap();
+      selectVenue(selectedVenueId, true);
+    }
   });
 
+  updateVenueToggle();
   updateCompetitionLabels();
   renderVenueList();
-  createMap();
-  selectVenue(selectedVenueId, true);
-  await refreshMatches();
+  if (!dashboard.classList.contains("is-hidden")) {
+    createMap();
+    selectVenue(selectedVenueId, true);
+  }
   tick();
   setInterval(tick, 1000);
+  await refreshMatches();
 }
 
 function updateCompetitionLabels() {
