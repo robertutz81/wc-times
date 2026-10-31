@@ -1,6 +1,7 @@
 import { createReadStream, existsSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join, normalize, resolve, sep } from "node:path";
+import { authenticate } from "./lib/basic-auth.js";
 
 const root = resolve(process.cwd());
 const port = Number(process.env.PORT || 5173);
@@ -14,7 +15,19 @@ const types = new Map([
   [".svg", "image/svg+xml"]
 ]);
 
-createServer((request, response) => {
+createServer(async (request, response) => {
+  response.setHeader("Cache-Control", "private, no-store");
+  const denied = await authenticate(
+    request.headers.authorization,
+    process.env.BASIC_AUTH_USER,
+    process.env.BASIC_AUTH_PASSWORD
+  );
+  if (denied) {
+    response.writeHead(denied.status, Object.fromEntries(denied.headers));
+    response.end(await denied.text());
+    return;
+  }
+
   const url = new URL(request.url || "/", `http://${host}:${port}`);
   const requestedPath = normalize(decodeURIComponent(url.pathname)).replace(/^(\.\.[/\\])+/, "");
   let filePath = resolve(join(root, requestedPath === "/" ? "index.html" : requestedPath));
